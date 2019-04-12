@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Fridge Corner</title>
+  <icon>https://www.gravatar.com/avatar/fb57ee9372b4c0b1b5493e12e0eba353</icon>
+  <subtitle>do it again and again</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://ultimatefridge.top/"/>
+  <updated>2019-04-11T14:15:04.184Z</updated>
+  <id>http://ultimatefridge.top/</id>
+  
+  <author>
+    <name>yulecheng</name>
+    <email>yulecheng@gmail.com</email>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>修改 hexo 的 markdown 标题链接形式</title>
+    <link href="http://ultimatefridge.top/20190411/modify-title-link-in-hexo.html"/>
+    <id>http://ultimatefridge.top/20190411/modify-title-link-in-hexo.html</id>
+    <published>2019-04-11T01:47:34.000Z</published>
+    <updated>2019-04-11T14:15:04.184Z</updated>
+    
+    <content type="html"><![CDATA[<p>修改 hexo 的 markdown 标题链接形式以便和 vscode 更好的配合写作.</p><a id="more"></a><!-- TOC --><ul><li><a href="#1-配置-hexo">1. 配置 hexo</a></li><li><a href="#2-修改依赖包的源码">2. 修改依赖包的源码</a></li></ul><!-- /TOC --><p>目前主力编辑器是 vscode，大部分的 markdown 文章都是在 vscode 里面写，然后复制到印象笔记或者hexo里去。</p><p>vscode 里使用 Markdown TOC 插件来为 markdown 文档生成 toc。但是生成的链接形式与 hexo 渲染生成的链接形式不一样，导致在 hexo 里文章内容的 toc 不能正常导航。</p><p>例子：</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">对于以下标题</span><br><span class="line"></span><br><span class="line"><span class="section"># 2.4. HelloWorld</span></span><br><span class="line"></span><br><span class="line">Markdown TOC 生成的链接形式为：#24-hellowold</span><br><span class="line"></span><br><span class="line">在 hexo 里渲染生成的链接形式为：#2-4-HelloWorld</span><br></pre></td></tr></table></figure><p>Markdown TOC 会把标题里的英文字母全部小写，并且每级标题用 <code>-</code> 隔开。</p><p>更改以下两处地方即可让 hexo 的链接形式与 Markdown TOC 的一致。</p><h1 id="1-配置-hexo"><a href="#1-配置-hexo" class="headerlink" title="1. 配置 hexo"></a>1. 配置 hexo</h1><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://github.com/hexojs/hexo-renderer-marked/blob/master/README.md</span></span><br><span class="line"><span class="attr">marked:</span></span><br><span class="line"><span class="attr">  modifyAnchors:</span> <span class="number">1</span> <span class="comment"># 默认为’‘,默认行为，不改变标题中的字母的大小写；设置为 1，则将内容中的 h1，h2 等标题中的字母转换为小写。设置为 1 是为了兼容 vscode 中的 toc 插件生成的链接（该插件会将字母全部变为小写）</span></span><br></pre></td></tr></table></figure><h1 id="2-修改依赖包的源码"><a href="#2-修改依赖包的源码" class="headerlink" title="2. 修改依赖包的源码"></a>2. 修改依赖包的源码</h1><p>在 <code>node_modules/hexo-util/lib/slugize.js</code> 中增加一个正则替换语句</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原代码</span></span><br><span class="line"><span class="keyword">var</span> result = escapeDiacritic(str)</span><br><span class="line">    <span class="comment">// Remove control characters</span></span><br><span class="line">    .replace(rControl, <span class="string">''</span>)</span><br><span class="line">    <span class="comment">// Replace special characters</span></span><br><span class="line">    .replace(rSpecial, separator)</span><br><span class="line">    <span class="comment">// Remove continous separators</span></span><br><span class="line">    .replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(escapedSep + <span class="string">'&#123;2,&#125;'</span>, <span class="string">'g'</span>), separator)</span><br><span class="line">    <span class="comment">// Remove prefixing and trailing separtors</span></span><br><span class="line">    .replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'^'</span> + escapedSep + <span class="string">'+|'</span> + escapedSep + <span class="string">'+$'</span>, <span class="string">'g'</span>), <span class="string">''</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改为</span></span><br><span class="line"><span class="keyword">var</span> result = escapeDiacritic(str)</span><br><span class="line">    <span class="comment">// Remove control characters</span></span><br><span class="line">    .replace(rControl, <span class="string">''</span>)</span><br><span class="line">    <span class="comment">// Adapt to Markdown TOC</span></span><br><span class="line">    .replace(<span class="regexp">/(\d+)(\.)(?!\s)/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">fullMatch, group1, group2</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> group1;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// Replace special characters</span></span><br><span class="line">    .replace(rSpecial, separator)</span><br><span class="line">    <span class="comment">// Remove continous separators</span></span><br><span class="line">    .replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(escapedSep + <span class="string">'&#123;2,&#125;'</span>, <span class="string">'g'</span>), separator)</span><br><span class="line">    <span class="comment">// Remove prefixing and trailing separtors</span></span><br><span class="line">    .replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'^'</span> + escapedSep + <span class="string">'+|'</span> + escapedSep + <span class="string">'+$'</span>, <span class="string">'g'</span>), <span class="string">''</span>);</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;修改 hexo 的 markdown 标题链接形式以便和 vscode 更好的配合写作.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="tools" scheme="http://ultimatefridge.top/categories/tools/"/>
+    
+    
+      <category term="vscode" scheme="http://ultimatefridge.top/tags/vscode/"/>
+    
+      <category term="hexo" scheme="http://ultimatefridge.top/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vue 中使用 jQuery</title>
+    <link href="http://ultimatefridge.top/20190408/using-jquery-in-vue.html"/>
+    <id>http://ultimatefridge.top/20190408/using-jquery-in-vue.html</id>
+    <published>2019-04-08T07:14:34.000Z</published>
+    <updated>2019-04-12T01:08:15.019Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://www.clientresourcesinc.com/wp-content/uploads/2018/06/vuejs_logo.png" alt="vue" title>                </div>                <div class="image-caption">vue</div>            </figure><a id="more"></a><!-- TOC --><ul><li><a href="#1-npm-安装-jquery">1. npm 安装 jQuery</a></li><li><a href="#2-低版本-jquery">2. 低版本 jQuery</a></li></ul><!-- /TOC --><h1 id="1-npm-安装-jquery"><a href="#1-npm-安装-jquery" class="headerlink" title="1. npm 安装 jQuery"></a>1. npm 安装 jQuery</h1><p><a href="https://maketips.net/tip/223/how-to-include-jquery-into-vuejs">参考文章</a></p><h1 id="2-低版本-jquery"><a href="#2-低版本-jquery" class="headerlink" title="2. 低版本 jQuery"></a>2. 低版本 jQuery</h1><p>为了兼容原有项目，需要使用低版本 1.8.3 的 jQuery。</p><p><a href="https://cloud.tencent.com/developer/article/1011243">参考文章</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;figure class=&quot;image-bubble&quot;&gt;
+                &lt;div class=&quot;img-lightbox&quot;&gt;
+                    &lt;div class=&quot;overlay&quot;&gt;&lt;/div&gt;
+                    &lt;img src=&quot;https://www.clientresourcesinc.com/wp-content/uploads/2018/06/vuejs_logo.png&quot; alt=&quot;vue&quot; title&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;image-caption&quot;&gt;vue&lt;/div&gt;
+            &lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="coding" scheme="http://ultimatefridge.top/categories/coding/"/>
+    
+    
+      <category term="vue" scheme="http://ultimatefridge.top/tags/vue/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vscode 个人常用快捷键</title>
+    <link href="http://ultimatefridge.top/20190403/vscode-commonly-shortcuts.html"/>
+    <id>http://ultimatefridge.top/20190403/vscode-commonly-shortcuts.html</id>
+    <published>2019-04-03T02:36:10.000Z</published>
+    <updated>2019-04-12T01:22:18.262Z</updated>
+    
+    <content type="html"><![CDATA[<p>整理一下日常使用 vscode 最常用的快捷键，备忘，也供大家参考</p><a id="more"></a><!-- TOC --><ul><li><a href="#1-默认-source默认">1. 默认（ Source：默认）</a></li><li><a href="#2-自定-source用户">2. 自定（ Source：用户）</a></li></ul><!-- /TOC --><p>以下表格，’名称‘一项，用的是 vscode 中文版的一致名称，方便在 vscode 里查找。</p><h1 id="1-默认（-source：默认）"><a href="#1-默认（-source：默认）" class="headerlink" title="1. 默认（ Source：默认）"></a>1. 默认（ Source：默认）</h1><table><thead><tr><th style="text-align:left">名称</th><th style="text-align:center">按键</th><th style="text-align:left">解释说明</th></tr></thead><tbody><tr><td style="text-align:left">更改语言模式</td><td style="text-align:center">⌘+k,m</td><td style="text-align:left">改变文件的语言，对于新建一个空白无后缀的文件的时候，特别有用</td></tr><tr><td style="text-align:left">终端：新建集成终端</td><td style="text-align:center">⌃+⇧+`</td><td style="text-align:left">无</td></tr><tr><td style="text-align:left">向上复制行（向下复制行）</td><td style="text-align:center">⇧+⌥+↑ ( ⇧+⌥+↓ )</td><td style="text-align:left">复制光标所在的行</td></tr><tr><td style="text-align:left">删除行</td><td style="text-align:center">⇧+⌘+k</td><td style="text-align:left">删除光标所在的行</td></tr></tbody></table><h1 id="2-自定（-source：用户）"><a href="#2-自定（-source：用户）" class="headerlink" title="2. 自定（ Source：用户）"></a>2. 自定（ Source：用户）</h1><table><thead><tr><th style="text-align:left">名称</th><th style="text-align:left">按键</th><th style="text-align:left">解释说明</th><th style="text-align:left">是否与系统默认的冲突</th></tr></thead><tbody><tr><td style="text-align:left">终端：聚焦到终端</td><td style="text-align:left">⌘+k,j</td><td style="text-align:left">把当前焦点切换到终端窗口中，在编辑文件的时候，切换回终端运行命令，非常有用；如果当前没有终端窗口，会新建一个</td><td style="text-align:left">否</td></tr><tr><td style="text-align:left">终端：聚焦于上一终端（下一终端）</td><td style="text-align:left">⌃+⌘,↑（ ⌃+⌘,↓ ）</td><td style="text-align:left">如果当前焦点不在终端，该命令与上一个聚焦到终端的作用一样，聚焦（无则新建）；如果当前焦点在终端，并且打开了多个终端，则会在多个终端间上下切换</td><td style="text-align:left">否</td></tr></tbody></table>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;整理一下日常使用 vscode 最常用的快捷键，备忘，也供大家参考&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="tools" scheme="http://ultimatefridge.top/categories/tools/"/>
+    
+    
+      <category term="vscode" scheme="http://ultimatefridge.top/tags/vscode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>字符串相关知识总结</title>
+    <link href="http://ultimatefridge.top/20170730/knowledge-about-string.html"/>
+    <id>http://ultimatefridge.top/20170730/knowledge-about-string.html</id>
+    <published>2017-07-30T09:19:52.000Z</published>
+    <updated>2019-04-12T01:22:08.100Z</updated>
+    
+    <content type="html"><![CDATA[<p>说到字符串，就离不开 unicode，utf-8，utf-16等各种定义。同时日常写代码过程中，也会对字符串使用正则匹配，查找等。字符串相关知识点整理汇总，不断更新汇总。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://zelig880.com/wp-content/uploads/2017/07/c-strings.jpg" alt="strings" title>                </div>                <div class="image-caption">strings</div>            </figure><a id="more"></a><!-- TOC --><ul><li><a href="#1-unicode">1. unicode</a><ul><li><a href="#11-unicode-的定义">1.1. unicode 的定义</a></li><li><a href="#12-unicode-字符集">1.2. unicode 字符集</a></li></ul></li><li><a href="#2-utf8">2. utf8</a><ul><li><a href="#21-utf8-是一个编码规则">2.1. utf8 是一个编码规则</a></li><li><a href="#22-编码规则">2.2. 编码规则</a></li><li><a href="#23-中文在utf8中用3个字节表示">2.3. 中文在utf8中用3个字节表示</a></li><li><a href="#24-php-中的-utf8">2.4. PHP 中的 utf8</a></li><li><a href="#25-与ascii编码的关系">2.5. 与ascii编码的关系</a></li></ul></li><li><a href="#3-php中的字符串">3. php中的字符串</a></li><li><a href="#4-参考文章">4. 参考文章</a></li></ul><!-- /TOC --><h1 id="1-unicode"><a href="#1-unicode" class="headerlink" title="1. unicode"></a>1. unicode</h1><h2 id="11-unicode-的定义"><a href="#11-unicode-的定义" class="headerlink" title="1.1. unicode 的定义"></a>1.1. unicode 的定义</h2><blockquote><p>字符集：为每一个「字符」分配一个唯一的 ID（学名为码位 / 码点 / Code Point）</p></blockquote><p>狭义的unicode是一种字符集，目的是将世界上任何文字和标志全部编码。</p><p>广义的unicode是一个标准，定义了一个字符集，和一系列的编码规则。即 unicode 字符集和 utf8，utf16 等编码规则。</p><h2 id="12-unicode-字符集"><a href="#12-unicode-字符集" class="headerlink" title="1.2. unicode 字符集"></a>1.2. unicode 字符集</h2><p>每个字符的位置称为码点（Code Point），U+(hex)表示。例如‘知’的码位是30693，记作 U+77E5（30693 的十六进制为 0x77E5）。</p><p>Unicode目前总共有17个平面，0x000000 - 0x10FFFF。</p><p>每个平面有65536个码点，占用2字节，用16进制表示就是 0x0000 - 0xFFFF。一般常说的unicode，指的是基本平面，即码点为 U+0000 - u+FFFF的字符。</p><h1 id="2-utf8"><a href="#2-utf8" class="headerlink" title="2. utf8"></a>2. utf8</h1><h2 id="21-utf8-是一个编码规则"><a href="#21-utf8-是一个编码规则" class="headerlink" title="2.1. utf8 是一个编码规则"></a>2.1. utf8 是一个编码规则</h2><p>utf8用1到4个字节表示一个字符，它是根据一个字符的unicode码点来决定如何编码，因此utf8是一个编码规则。</p><h2 id="22-编码规则"><a href="#22-编码规则" class="headerlink" title="2.2. 编码规则"></a>2.2. 编码规则</h2><ul><li>UTF-8的编码规则很简单，只有二条：<ul><li>1 对于单字节的符号，字节的第一位设为0，后面7位为这个符号的unicode码。因此对于英语字母，UTF-8编码和ASCII码是相同的。</li><li>2 对于n字节的符号（n&gt;1），第一个字节的前n位都设为1，第n+1位设为0，后面字节的前两位一律设为10。剩下的没有提及的二进制位，全部为这个符号的unicode码。</li></ul></li></ul><table><thead><tr><th style="text-align:left">Unicode符号范围 (十六进制)</th><th style="text-align:left">UTF-8编码方式（二进制）</th></tr></thead><tbody><tr><td style="text-align:left">0000 0000-0000 007F</td><td style="text-align:left">0xxxxxxx</td></tr><tr><td style="text-align:left">0000 0080-0000 07FF</td><td style="text-align:left">110xxxxx 10xxxxxx</td></tr><tr><td style="text-align:left">0000 0800-0000 FFFF</td><td style="text-align:left">1110xxxx 10xxxxxx 10xxxxxx</td></tr><tr><td style="text-align:left">0001 0000-0010 FFFF</td><td style="text-align:left">11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td></tr></tbody></table><ul><li><p>unicode中与中文有关的平面<a href="http://bbs.csdn.net/topics/320152831">链接</a></p><blockquote><p>看完所有的 Unicode 区块就不会有这个问题了～～<br>西方大多数是拼音文字，所以我们的文字被他们叫做“表意文字”～～<br>CJK 统一表意扩展 A：U+3400 - U+4DBF<br>CJK 统一表意字符：U+4E00 - U+9FFF<br>CJK 兼容表意字符：U+F900 - U+FAFF<br>CJK 统一表意扩展 B：U+20000 - U+2A6DF<br>CJK 兼容表意字符：U+2F800 - U+2FA1F<br>其中扩展 B 区里面的字你一辈子都不会见到几个，“CJK 兼容表意字符”里面的字通常在“CJK 统一表意字符”都有对应。</p></blockquote></li></ul><h2 id="23-中文在utf8中用3个字节表示"><a href="#23-中文在utf8中用3个字节表示" class="headerlink" title="2.3. 中文在utf8中用3个字节表示"></a>2.3. 中文在utf8中用3个字节表示</h2><p>根据utf-8的编码规则，可以知道unicode第一平面（0平面）上的符号对应utf-8为1到3个字节表示，cjk 统一表意扩展 A 的第一个字符是 x3400（是汉字‘一’），对应utf-8为3个字节表示。</p><p>因此可以说，我们能见到的极大极大部分汉字，在utf-8中都用3个字节表示。</p><p><code>知</code>的码点是 U+77E5，按照 UTF-8 编码为字节序列 0xE79FA5。</p><h2 id="24-php-中的-utf8"><a href="#24-php-中的-utf8" class="headerlink" title="2.4. PHP 中的 utf8"></a>2.4. PHP 中的 utf8</h2><p>在php中，字符串编码方式与文件保存的编码方式一致，文件一般以utf8保存，所以 php 中字符串一般可以认为是 utf8 编码。</p><p>用 strlen 函数，返回的是字符串的字节数。</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> strlen(<span class="string">'一'</span>); <span class="comment">// result is 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//‘知’的码点是 U+77E5，按照 UTF-8 编码为字节序列 0xE79FA5。  </span></span><br><span class="line">$string = <span class="string">'知'</span>;</span><br><span class="line"><span class="keyword">echo</span> unpack(<span class="string">'H*'</span>,$string)[<span class="number">1</span>]; <span class="comment">// result is e79fa5</span></span><br></pre></td></tr></table></figure><h2 id="25-与ascii编码的关系"><a href="#25-与ascii编码的关系" class="headerlink" title="2.5. 与ascii编码的关系"></a>2.5. 与ascii编码的关系</h2><p>ascii 是用单字节表示字符的规则，在标准的 ascii 码表中，0x01-0x7f，共127个字符。0x80 - 0xFF 是扩展的 ascii 码表，用来表示一个控制字符等。因此 utf8 编码规则是兼容 ascii 编码规则的。</p><h1 id="3-php中的字符串"><a href="#3-php中的字符串" class="headerlink" title="3. php中的字符串"></a>3. php中的字符串</h1><p>在php中，字符以utf8编码。</p><ul><li>简单匹配中文的一个正则表达式,因为一个英文字符的编码为01-7f,所以只要判断某个字节的大小为大于7f，则可以知道当前字符并不是单字节字符，而是一个 utf8 的多字节字符串。</li></ul><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match_all(<span class="string">'/[\0x7f-0xff]+/'</span>,$subjectString,$matches);</span><br></pre></td></tr></table></figure><ul><li>pack 与 unpack 函数</li></ul><p>将字符串压缩和解压的函数。</p><h1 id="4-参考文章"><a href="#4-参考文章" class="headerlink" title="4. 参考文章"></a>4. 参考文章</h1><ul><li><a href="https://segmentfault.com/q/1010000000695368/a-1020000000695701">参考1</a></li><li><a href="http://bbs.csdn.net/topics/320152831">参考2</a></li><li><a href="https://en.wikipedia.org/wiki/Unicode">参考3</a></li><li><a href="https://www.zhihu.com/question/22881537">参考4</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;说到字符串，就离不开 unicode，utf-8，utf-16等各种定义。同时日常写代码过程中，也会对字符串使用正则匹配，查找等。字符串相关知识点整理汇总，不断更新汇总。&lt;/p&gt;
+&lt;figure class=&quot;image-bubble&quot;&gt;
+                &lt;div class=&quot;img-lightbox&quot;&gt;
+                    &lt;div class=&quot;overlay&quot;&gt;&lt;/div&gt;
+                    &lt;img src=&quot;http://zelig880.com/wp-content/uploads/2017/07/c-strings.jpg&quot; alt=&quot;strings&quot; title&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;image-caption&quot;&gt;strings&lt;/div&gt;
+            &lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="coding" scheme="http://ultimatefridge.top/categories/coding/"/>
+    
+    
+      <category term="字符串" scheme="http://ultimatefridge.top/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+  </entry>
+  
+</feed>
