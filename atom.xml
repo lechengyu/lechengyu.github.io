@@ -45,18 +45,18 @@
     <link href="http://ultimatefridge.top/20190408/using-jquery-in-vue.html"/>
     <id>http://ultimatefridge.top/20190408/using-jquery-in-vue.html</id>
     <published>2019-04-08T07:14:34.000Z</published>
-    <updated>2019-04-12T01:08:15.019Z</updated>
+    <updated>2019-04-12T06:29:35.856Z</updated>
     
-    <content type="html"><![CDATA[<figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://www.clientresourcesinc.com/wp-content/uploads/2018/06/vuejs_logo.png" alt="vue" title>                </div>                <div class="image-caption">vue</div>            </figure><a id="more"></a><!-- TOC --><ul><li><a href="#1-npm-安装-jquery">1. npm 安装 jQuery</a></li><li><a href="#2-低版本-jquery">2. 低版本 jQuery</a></li></ul><!-- /TOC --><h1 id="1-npm-安装-jquery"><a href="#1-npm-安装-jquery" class="headerlink" title="1. npm 安装 jQuery"></a>1. npm 安装 jQuery</h1><p><a href="https://maketips.net/tip/223/how-to-include-jquery-into-vuejs">参考文章</a></p><h1 id="2-低版本-jquery"><a href="#2-低版本-jquery" class="headerlink" title="2. 低版本 jQuery"></a>2. 低版本 jQuery</h1><p>为了兼容原有项目，需要使用低版本 1.8.3 的 jQuery。</p><p><a href="https://cloud.tencent.com/developer/article/1011243">参考文章</a></p>]]></content>
+    <content type="html"><![CDATA[<figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://www.clientresourcesinc.com/wp-content/uploads/2018/06/vuejs_logo.png" alt="vue.js" title>                </div>                <div class="image-caption">vue.js</div>            </figure><a id="more"></a><!-- TOC --><ul><li><a href="#1-npm-安装-jquery">1. npm 安装 jQuery</a></li><li><a href="#2-低版本-jquery">2. 低版本 jQuery</a></li></ul><!-- /TOC --><h1 id="1-npm-安装-jquery"><a href="#1-npm-安装-jquery" class="headerlink" title="1. npm 安装 jQuery"></a>1. npm 安装 jQuery</h1><p><a href="https://maketips.net/tip/223/how-to-include-jquery-into-vuejs">参考文章</a></p><h1 id="2-低版本-jquery"><a href="#2-低版本-jquery" class="headerlink" title="2. 低版本 jQuery"></a>2. 低版本 jQuery</h1><p>为了兼容原有项目，需要使用低版本 1.8.3 的 jQuery。</p><p><a href="https://cloud.tencent.com/developer/article/1011243">参考文章</a></p>]]></content>
     
     <summary type="html">
     
       &lt;figure class=&quot;image-bubble&quot;&gt;
                 &lt;div class=&quot;img-lightbox&quot;&gt;
                     &lt;div class=&quot;overlay&quot;&gt;&lt;/div&gt;
-                    &lt;img src=&quot;https://www.clientresourcesinc.com/wp-content/uploads/2018/06/vuejs_logo.png&quot; alt=&quot;vue&quot; title&gt;
+                    &lt;img src=&quot;https://www.clientresourcesinc.com/wp-content/uploads/2018/06/vuejs_logo.png&quot; alt=&quot;vue.js&quot; title&gt;
                 &lt;/div&gt;
-                &lt;div class=&quot;image-caption&quot;&gt;vue&lt;/div&gt;
+                &lt;div class=&quot;image-caption&quot;&gt;vue.js&lt;/div&gt;
             &lt;/figure&gt;
     
     </summary>
