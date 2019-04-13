@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Git基础 | 终极冰箱 | Freeze！</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="git">
+    <meta name="description" content="git file lifecycle">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git基础">
+<meta property="og:url" content="http://ultimatefridge.top/20160226/Git基础.html">
+<meta property="og:site_name" content="终极冰箱">
+<meta property="og:description" content="git file lifecycle">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://static.zybuluo.com/yulecheng/l9ruszjzldd1rmmc15co03q4/lifecycle.png">
+<meta property="og:updated_time" content="2019-04-13T01:25:15.655Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git基础">
+<meta name="twitter:description" content="git file lifecycle">
+<meta name="twitter:image" content="http://static.zybuluo.com/yulecheng/l9ruszjzldd1rmmc15co03q4/lifecycle.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="终极冰箱" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">yulecheng</h5>
+          <a href="mailto:yulecheng@gmail.com" title="yulecheng@gmail.com" class="mail">yulecheng@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about">
+                <i class="icon icon-lg icon-user"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Git基础</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Git基础</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-02-26T14:16:26.000Z" itemprop="datePublished" class="page-time">
+  2016-02-26
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/coding/">coding</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-基本全局设置，设置名字和邮件地址"><span class="post-toc-text">1. 基本全局设置，设置名字和邮件地址</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#2-查看本项目的基本设置"><span class="post-toc-text">2. 查看本项目的基本设置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#3-创建本机的-ssh-key"><span class="post-toc-text">3. 创建本机的 ssh key</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#4-与远程仓库关联"><span class="post-toc-text">4. 与远程仓库关联</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#41-从远程仓库克隆"><span class="post-toc-text">4.1. 从远程仓库克隆</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#42-推送至远程仓库"><span class="post-toc-text">4.2. 推送至远程仓库</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#5-查看文件差异的命令"><span class="post-toc-text">5. 查看文件差异的命令</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#51-查看当前工作目录和暂存区之间的文件差异"><span class="post-toc-text">5.1. 查看当前工作目录和暂存区之间的文件差异</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#52-查看暂存区与上次commit版本文件的差异"><span class="post-toc-text">5.2. 查看暂存区与上次commit版本文件的差异</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#6-提交更新"><span class="post-toc-text">6. 提交更新</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#61-启动文本编辑器以便输入本次提交"><span class="post-toc-text">6.1. 启动文本编辑器以便输入本次提交</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#62-直接提交的方式，m后面跟的是说明。"><span class="post-toc-text">6.2. 直接提交的方式，m后面跟的是说明。</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#63-跳过使用暂存区"><span class="post-toc-text">6.3. 跳过使用暂存区</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#7-移除文件"><span class="post-toc-text">7. 移除文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#71-将文件或文件夹从工作目录中删除"><span class="post-toc-text">7.1. 将文件或文件夹从工作目录中删除</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#72-把文件从git仓库中删除"><span class="post-toc-text">7.2. 把文件从Git仓库中删除</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#8-推送-跟踪分支"><span class="post-toc-text">8. 推送/跟踪分支</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#81-创建远程分支"><span class="post-toc-text">8.1. 创建远程分支</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#82-从远程分支创建本地分支"><span class="post-toc-text">8.2. 从远程分支创建本地分支</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#83-设置本地分支跟踪分支"><span class="post-toc-text">8.3. 设置本地分支跟踪分支</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#831-从一个远程跟踪分支检出一个本地分支"><span class="post-toc-text">8.3.1. 从一个远程跟踪分支检出一个本地分支</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#832-建立一个本地分支并且跟踪远程分支"><span class="post-toc-text">8.3.2. 建立一个本地分支并且跟踪远程分支</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#84-设置一个本地分支跟踪某一支远程分支"><span class="post-toc-text">8.4. 设置一个本地分支跟踪某一支远程分支</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Git基础" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Git基础</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-02-26 22:16:26" datetime="2016-02-26T14:16:26.000Z" itemprop="datePublished">2016-02-26</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/coding/">coding</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style="display:none">
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://static.zybuluo.com/yulecheng/l9ruszjzldd1rmmc15co03q4/lifecycle.png" alt="git file lifecycle" title>
+                </div>
+                <div class="image-caption">git file lifecycle</div>
+            </figure>
+<a id="more"></a>
+<!-- TOC -->
+<ul>
+<li><a href="#1-基本全局设置设置名字和邮件地址">1. 基本全局设置，设置名字和邮件地址</a></li>
+<li><a href="#2-查看本项目的基本设置">2. 查看本项目的基本设置</a></li>
+<li><a href="#3-创建本机的-ssh-key">3. 创建本机的 ssh key</a></li>
+<li><a href="#4-与远程仓库关联">4. 与远程仓库关联</a><ul>
+<li><a href="#41-从远程仓库克隆">4.1. 从远程仓库克隆</a></li>
+<li><a href="#42-推送至远程仓库">4.2. 推送至远程仓库</a></li>
+</ul>
+</li>
+<li><a href="#5-查看文件差异的命令">5. 查看文件差异的命令</a><ul>
+<li><a href="#51-查看当前工作目录和暂存区之间的文件差异">5.1. 查看当前工作目录和暂存区之间的文件差异</a></li>
+<li><a href="#52-查看暂存区与上次commit版本文件的差异">5.2. 查看暂存区与上次commit版本文件的差异</a></li>
+</ul>
+</li>
+<li><a href="#6-提交更新">6. 提交更新</a><ul>
+<li><a href="#61-启动文本编辑器以便输入本次提交">6.1. 启动文本编辑器以便输入本次提交</a></li>
+<li><a href="#62-直接提交的方式m后面跟的是说明">6.2. 直接提交的方式，m后面跟的是说明。</a></li>
+<li><a href="#63-跳过使用暂存区">6.3. 跳过使用暂存区</a></li>
+</ul>
+</li>
+<li><a href="#7-移除文件">7. 移除文件</a><ul>
+<li><a href="#71-将文件或文件夹从工作目录中删除">7.1. 将文件或文件夹从工作目录中删除</a></li>
+<li><a href="#72-把文件从git仓库中删除">7.2. 把文件从Git仓库中删除</a></li>
+</ul>
+</li>
+<li><a href="#8-推送跟踪分支">8. 推送/跟踪分支</a><ul>
+<li><a href="#81-创建远程分支">8.1. 创建远程分支</a></li>
+<li><a href="#82-从远程分支创建本地分支">8.2. 从远程分支创建本地分支</a></li>
+<li><a href="#83-设置本地分支跟踪分支">8.3. 设置本地分支跟踪分支</a><ul>
+<li><a href="#831-从一个远程跟踪分支检出一个本地分支">8.3.1. 从一个远程跟踪分支检出一个本地分支</a></li>
+<li><a href="#832-建立一个本地分支并且跟踪远程分支">8.3.2. 建立一个本地分支并且跟踪远程分支</a></li>
+</ul>
+</li>
+<li><a href="#84-设置一个本地分支跟踪某一支远程分支">8.4. 设置一个本地分支跟踪某一支远程分支</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<h1 id="1-基本全局设置，设置名字和邮件地址"><a href="#1-基本全局设置，设置名字和邮件地址" class="headerlink" title="1. 基本全局设置，设置名字和邮件地址"></a>1. 基本全局设置，设置名字和邮件地址</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line">git config --global user.email <span class="string">"yourmail"</span></span><br></pre></td></tr></table></figure>
+<h1 id="2-查看本项目的基本设置"><a href="#2-查看本项目的基本设置" class="headerlink" title="2. 查看本项目的基本设置"></a>2. 查看本项目的基本设置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --list</span><br></pre></td></tr></table></figure>
+<h1 id="3-创建本机的-ssh-key"><a href="#3-创建本机的-ssh-key" class="headerlink" title="3. 创建本机的 ssh key"></a>3. 创建本机的 ssh key</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
+<p>然后用户主目录里找到.ssh目录，里面有 id_rsa 和 id_rsa.pub 两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub 是公钥，可以放心地告诉任何人。进入 github 的设置里，将公钥添加到里面的ssh key里面去即可。这样才可以使用 ssh 协议传输 git 数据。</p>
+<h1 id="4-与远程仓库关联"><a href="#4-与远程仓库关联" class="headerlink" title="4. 与远程仓库关联"></a>4. 与远程仓库关联</h1><h2 id="41-从远程仓库克隆"><a href="#41-从远程仓库克隆" class="headerlink" title="4.1. 从远程仓库克隆"></a>4.1. 从远程仓库克隆</h2><p>只要是开源的 github 项目，从远程仓库克隆是允许的。使用<code>git clone</code>命令克隆远程库，后面跟远程仓库的地址，然后是文件夹没名字。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> github/address path/to/folder</span><br></pre></td></tr></table></figure>
+<p>上述从远程仓库拉取项目，并且默认已经将本地与远程库（名字为<strong>origin</strong>）关联起来。<br>以后使用以下 git push  命令推送本地的 master 分支到远程 origin 库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+<h2 id="42-推送至远程仓库"><a href="#42-推送至远程仓库" class="headerlink" title="4.2. 推送至远程仓库"></a>4.2. 推送至远程仓库</h2><p>对于一个空的远程仓库，可以使用以下命令将本地仓库与远程仓库关联，并且推送内容至远端，进行远程仓库的初始化。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin XXXXXXXXX</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<p>这样本地仓库的master主分支已经和远程仓库(origin)关联起来。</p>
+<h1 id="5-查看文件差异的命令"><a href="#5-查看文件差异的命令" class="headerlink" title="5. 查看文件差异的命令"></a>5. 查看文件差异的命令</h1><h2 id="51-查看当前工作目录和暂存区之间的文件差异"><a href="#51-查看当前工作目录和暂存区之间的文件差异" class="headerlink" title="5.1. 查看当前工作目录和暂存区之间的文件差异"></a>5.1. 查看当前工作目录和暂存区之间的文件差异</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff</span><br></pre></td></tr></table></figure>
+<p>命令比较的是当前工作目录和暂存区之间的差异，也就是比较刚刚修改的内容与已经暂存起来的内容的差异，因此如果你刚刚使用git add -A 提交了所有跟踪的文件的修改到暂存区，git diff 命令将看不到内容输出，因为此时的工作目录是clean的。</p>
+<h2 id="52-查看暂存区与上次commit版本文件的差异"><a href="#52-查看暂存区与上次commit版本文件的差异" class="headerlink" title="5.2. 查看暂存区与上次commit版本文件的差异"></a>5.2. 查看暂存区与上次commit版本文件的差异</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff --staged</span><br></pre></td></tr></table></figure>
+<h1 id="6-提交更新"><a href="#6-提交更新" class="headerlink" title="6. 提交更新"></a>6. 提交更新</h1><h2 id="61-启动文本编辑器以便输入本次提交"><a href="#61-启动文本编辑器以便输入本次提交" class="headerlink" title="6.1. 启动文本编辑器以便输入本次提交"></a>6.1. 启动文本编辑器以便输入本次提交</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add</span><br></pre></td></tr></table></figure>
+<p>这种方式会启动文本编辑器以便输入本次提交的说明。</p>
+<h2 id="62-直接提交的方式，m后面跟的是说明。"><a href="#62-直接提交的方式，m后面跟的是说明。" class="headerlink" title="6.2. 直接提交的方式，m后面跟的是说明。"></a>6.2. 直接提交的方式，m后面跟的是说明。</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add -m 提交说明</span><br></pre></td></tr></table></figure>
+<h2 id="63-跳过使用暂存区"><a href="#63-跳过使用暂存区" class="headerlink" title="6.3. 跳过使用暂存区"></a>6.3. 跳过使用暂存区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add -am</span><br></pre></td></tr></table></figure>
+<p>Git 提供了一个跳过使用暂存区域的方式， 只要在提交的时候，给 git commit 加上 -a 选项，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤。</p>
+<h1 id="7-移除文件"><a href="#7-移除文件" class="headerlink" title="7. 移除文件"></a>7. 移除文件</h1><h2 id="71-将文件或文件夹从工作目录中删除"><a href="#71-将文件或文件夹从工作目录中删除" class="headerlink" title="7.1. 将文件或文件夹从工作目录中删除"></a>7.1. 将文件或文件夹从工作目录中删除</h2><p>这时候可以使用命令。此命令会将目标文件从跟踪清单中删除，并且从工作目录中删除。也可以从工作目录中删掉，然后用git add命令来执行更新。</p>
+<h2 id="72-把文件从git仓库中删除"><a href="#72-把文件从git仓库中删除" class="headerlink" title="7.2. 把文件从Git仓库中删除"></a>7.2. 把文件从Git仓库中删除</h2><p>另外一种情况是，我们想把文件从Git仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。 换句话说，你想让文件保留在磁盘，但是并不想让 Git 继续跟踪。 当你忘记添加 .gitignore 文件，不小心把一个很大的日志文件或一堆 .a 这样的编译生成文件添加到暂存区时，这一做法尤其有用。为达到这一目的，使用 –cached 选项。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rm --cached 目标文件或文件夹</span><br></pre></td></tr></table></figure>
+<h1 id="8-推送-跟踪分支"><a href="#8-推送-跟踪分支" class="headerlink" title="8. 推送/跟踪分支"></a>8. 推送/跟踪分支</h1><blockquote>
+<p>远程引用是对远程仓库的引用（指针），包括分支、标签等等。 你可以通过 git ls-remote (remote) 来显式地获得远程引用的完整列表，或者通过 git remote show (remote) 获得远程分支的更多信息。 然而，一个更常见的做法是利用远程跟踪分支。</p>
+<p>远程跟踪分支是远程分支状态的引用。它们是你不能移动的本地引用，当你做任何网络通信操作时，它们会自动移动。远程跟踪分支像是你上次连接到远程仓库时，那些分支所处状态的书签。它们以 (remote)/(branch) 形式命名。</p>
+<p>例如，如果你想要看你最后一次与远程仓库 origin 通信时 master 分支的状态，你可以查看 origin/master 分支。 你与同事合作解决一个问题并且他们推送了一个 iss53 分支，你可能有自己的本地 iss53 分支；但是在服务器上的分支会指向 origin/iss53 的提交。</p>
+</blockquote>
+<p>当我们以克隆远程仓库或者推送本地文件夹初始化远程仓库的形式建立起本地与远程仓库的关联时，即将本地的master分支与远程仓库(origin)的master分支关联起来。</p>
+<p>当你想要公开分享一个分支时，需要将其推送到有写入权限的远程仓库上。本地的分支并不会自动与远程仓库同你必须显式地推送想要分享的分支。这样，你就可以把不愿意分享的内容放到私人分支上，而将需要和别人协作的内容推送到公开分支。</p>
+<h2 id="81-创建远程分支"><a href="#81-创建远程分支" class="headerlink" title="8.1. 创建远程分支"></a>8.1. 创建远程分支</h2><p>如果希望和别人一起在名为 serverfix 的分支上工作，你可以像推送第一个分支那样推送它。 运行 git push (remote) (branch):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin serverfix</span><br></pre></td></tr></table></figure>
+<p>下一次其他协作者从服务器上抓取数据时，他们会在本地生成一个远程分支 origin/serverfix，指向服务器的 serverfix 分支的引用.</p>
+<h2 id="82-从远程分支创建本地分支"><a href="#82-从远程分支创建本地分支" class="headerlink" title="8.2. 从远程分支创建本地分支"></a>8.2. 从远程分支创建本地分支</h2><p>可以运行 <code>git merge origin/serverfix</code> 将这些工作合并到当前所在的分支。 如果想要在自己的 serverfix 分支上工作，可以将其建立在远程跟踪分支之上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b serverfix origin/serverfix</span><br><span class="line">Branch serverfix <span class="built_in">set</span> up to track remote branch serverfix from origin.</span><br><span class="line">Switched to a new branch <span class="string">'serverfix'</span></span><br></pre></td></tr></table></figure>
+<p>这会给你一个用于工作的本地分支，并且起点位于 origin/serverfix。</p>
+<h2 id="83-设置本地分支跟踪分支"><a href="#83-设置本地分支跟踪分支" class="headerlink" title="8.3. 设置本地分支跟踪分支"></a>8.3. 设置本地分支跟踪分支</h2><h3 id="831-从一个远程跟踪分支检出一个本地分支"><a href="#831-从一个远程跟踪分支检出一个本地分支" class="headerlink" title="8.3.1. 从一个远程跟踪分支检出一个本地分支"></a>8.3.1. 从一个远程跟踪分支检出一个本地分支</h3><p>从一个远程跟踪分支检出一个本地分支会自动创建一个叫做 “跟踪分支”（有时候也叫做 “上游分支”）。 跟踪分支是与远程分支有直接关系的本地分支。 如果在一个跟踪分支上输入 git pull，Git 能自动地识别去哪个服务器上抓取、合并到哪个分支。</p>
+<h3 id="832-建立一个本地分支并且跟踪远程分支"><a href="#832-建立一个本地分支并且跟踪远程分支" class="headerlink" title="8.3.2. 建立一个本地分支并且跟踪远程分支"></a>8.3.2. 建立一个本地分支并且跟踪远程分支</h3><p>当克隆一个仓库时，它通常会自动地创建一个跟踪 origin/master 的 master 分支。 然而，如果你愿意的话可以设置其他的跟踪分支 - 其他远程仓库上的跟踪分支，或者不跟踪 master 分支。 最简单的就是之前看到的例子，运行 git checkout -b [branch] [remotename]/[branch]。 这是一个十分常用的操作所以 Git 提供了 –track 快捷方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout --track origin/serverfix</span><br><span class="line">Branch serverfix <span class="built_in">set</span> up to track remote branch serverfix from origin.</span><br><span class="line">Switched to a new branch <span class="string">'serverfix'</span></span><br></pre></td></tr></table></figure>
+<p>如果想要将本地分支与远程分支设置为不同名字，你可以轻松地增加一个不同名字的本地分支的上一个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b sf origin/serverfix</span><br><span class="line">Branch sf <span class="built_in">set</span> up to track remote branch serverfix from origin.</span><br><span class="line">Switched to a new branch <span class="string">'sf'</span></span><br></pre></td></tr></table></figure>
+<p>现在，本地分支 sf 会自动从 origin/serverfix 拉取。</p>
+<h2 id="84-设置一个本地分支跟踪某一支远程分支"><a href="#84-设置一个本地分支跟踪某一支远程分支" class="headerlink" title="8.4. 设置一个本地分支跟踪某一支远程分支"></a>8.4. 设置一个本地分支跟踪某一支远程分支</h2><p><strong>设置一个本地分支跟踪某一支远程分支</strong>设置已有的本地分支跟踪一个刚刚拉取下来的远程分支，或者想要修改正在跟踪的上游分支，你可以在任意时间使用 -u 或 –set-upstream-to 选项运行 git branch 来显式地设置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -u origin/serverfix</span><br><span class="line">Branch serverfix <span class="built_in">set</span> up to track remote branch serverfix from origin.</span><br></pre></td></tr></table></figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-04-13T01:25:15.655Z" itemprop="dateUpdated">2019-04-13 09:25:15</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/20160226/Git基础.html" target="_blank" rel="external">http://ultimatefridge.top/20160226/Git基础.html</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://ultimatefridge.top">
+            <img src="/img/avatar.jpg" alt="yulecheng">
+            yulecheng
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ultimatefridge.top/20160226/Git基础.html&title=《Git基础》 — 终极冰箱&pic=http://ultimatefridge.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ultimatefridge.top/20160226/Git基础.html&title=《Git基础》 — 终极冰箱&source=
+                
+                    
+                    
+                
+..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ultimatefridge.top/20160226/Git基础.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git基础》 — 终极冰箱&url=http://ultimatefridge.top/20160226/Git基础.html&via=http://ultimatefridge.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ultimatefridge.top/20160226/Git基础.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/20170730/knowledge-about-string.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">字符串相关知识总结</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'true' == 'true',
+            verify: 'true' == 'true',
+            appId: "16vR2iRAWOSKxy9fSYOQ3hL9-gzGzoHsz",
+            appKey: "RqWQgI1gUK9cz4GGeWnJq9An",
+            avatar: "mm",
+            placeholder: "Just go go",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大佬
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check" data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>yulecheng &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ultimatefridge.top/20160226/Git基础.html&title=《Git基础》 — 终极冰箱&pic=http://ultimatefridge.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ultimatefridge.top/20160226/Git基础.html&title=《Git基础》 — 终极冰箱&source=
+                
+                    
+                    
+                
+..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ultimatefridge.top/20160226/Git基础.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git基础》 — 终极冰箱&url=http://ultimatefridge.top/20160226/Git基础.html&via=http://ultimatefridge.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ultimatefridge.top/20160226/Git基础.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACL0lEQVR42u3awY6DMAxF0f7/TzPbSlPCfTathHOzQoBCDgvLif164XG8jf93yNP1bOv7tw0ZMmQ8lnEsR7qss6fkmv+sD1QZMmRswDiLYGfvkKnTd8h3T+/LkCFDxkkQ5OkjCawyZMiQcS+DJIV848oDvQwZMnZmkE1sujgeRvlvumEvLkOGjAcy+Kn776+/Ut+QIUPGoxhHONLZyLLSYsCHr8iQIWM0gwc4cpTGN6u1YsDFV2TIkDGa8fvCZOedVrIoQ4aMcQxyHM/fT1vKSFBGAVeGDBkPZ/DWh04K2Nn6oh8qQ4aMLRm1NghS5iw2UqxnkyFDxmhGmoSloTk9pGttX2XIkLENgx9+rakoRIYtHRcrlCFDxlBGv9GhdvSfBtyLeWTIkDGakTZDdBK42i+IA7cMGTLGMfrh8hvpID/IkyFDxj6MdSgkn+Th+K6C6EV9Q4YMGeMYnQSOx71achk0W8iQIWMzRicH46kkD+uoZ0SGDBlDGTxQpodipKUj/XGoJCBDhozRjFc4atvXfnPYRc+IDBkyRjP6LRRxiMTtX6SoIEOGjB0Y6XXasEWofNFBy4UMGTIezjjC0W/LSMuTiCpDhozRjNqWlW9KeamS89LZZMiQMYNRC7K8RSPF1IqjMmTI2IFRa3qobWs7ad9Fs4UMGTJkND6Zlg2K2asMGTJk4Ke10FybQYYMGfsweHpH3k/LAzWYDBky9mGkeRdZOgnlhJ3+FBkyZIxj/AHrSfAuI/cEjAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
